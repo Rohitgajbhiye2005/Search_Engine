@@ -3,7 +3,7 @@ async function search() {
     if (!query) return;
 
     try {
-        const res = await fetch(`http://localhost:8080/search?q=${encodeURIComponent(query)}&limit=10`);
+        const res = await fetch(`/search?q=${encodeURIComponent(query)}&limit=10`);
         const data = await res.json();
 
         const resultsDiv = document.getElementById("results");

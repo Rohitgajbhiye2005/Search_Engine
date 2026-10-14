@@ -4,7 +4,7 @@ import (
 	"log"
 	"mini_search_engine/api"
 	"mini_search_engine/config"
-	//crawler "mini_search_engine/crawler"
+	crawler "mini_search_engine/crawler"
 	"mini_search_engine/db"
 	"mini_search_engine/repository"
 	"mini_search_engine/service"
@@ -18,12 +18,17 @@ func main() {
 
 	repo:=repository.NewPostgresRepository(dbConn)
 	svc:=service.NewPageService(repo)
-	// seeds := []string{
-	// 	//"https://youtube.com",
-	// 	"https://golang.org",
-	// 	"https://stackoverflow.com",
-	// }
-	log.Println("Starting Rest Api server on :8080")
-	api.StartServer(svc)
-	//crawler.Crawl(seeds, 1000,repo)
+	seeds := []string{
+		//"https://youtube.com",
+		"https://golang.org",
+		"https://stackoverflow.com",
+	}
+	// log.Println("Starting Rest Api server on :8080")
+	// api.StartServer(svc)
+	// crawler.Crawl(seeds, 1000,repo)
+	log.Println("Starting initial web crawl...")
+    crawler.Crawl(seeds, 1000, repo)
+
+    log.Println("Crawling completed. Starting REST API server on :8080...")
+    api.StartServer(svc)
 }

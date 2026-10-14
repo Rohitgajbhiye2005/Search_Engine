@@ -49,6 +49,11 @@ func StartServer(svc service.PageService){
 		c.JSON(http.StatusOK, gin.H{"message": "Crawling started"})
 	})
 
+
+	r.StaticFile("/", "./frontend/index.html")
+	r.StaticFile("/style.css", "./frontend/style.css")
+	r.StaticFile("/app.js", "./frontend/app.js")
+
 	// Run server on port 8080
 	r.Run(":8080")
 
