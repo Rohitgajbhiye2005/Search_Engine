@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"log"
 	"mini_search_engine/model"
 	//"mini_search_engine/model"
 )
@@ -76,11 +77,18 @@ func (r *PostgresRepository)InsertPage(page *model.Page)error{
 func (r *PostgresRepository) SearchPages(query string, limit int) ([]model.SearchResult, error) {
     rows, err := r.db.Query(`
         SELECT url, title
-        FROM mypages.pages
-        WHERE content_tsv @@ plainto_tsquery('english', $1)
-        ORDER BY ts_rank_cd(content_tsv, plainto_tsquery('english', $1)) DESC
-        LIMIT $2
+         FROM mypages.pages
+         WHERE to_tsvector('english', COALESCE(content, ''))
+        @@ plainto_tsquery('english', $1)
+         ORDER BY ts_rank(to_tsvector('english', COALESCE(content, '')),
+        plainto_tsquery('english', $1)) DESC
+         LIMIT $2
+        
     `, query, limit)
+    if err != nil {
+        log.Printf("ERROR executing search SQL: %v", err)
+        return nil, err
+    }
     if err != nil {
         return nil, err
     }
@@ -90,9 +98,16 @@ func (r *PostgresRepository) SearchPages(query string, limit int) ([]model.Searc
     for rows.Next() {
         var res model.SearchResult
         if err := rows.Scan(&res.URL, &res.Title); err != nil {
+            log.Printf("ERROR scanning search result: %v", err)
             return nil, err
         }
         results = append(results, res)
     }
+
+    if err:=rows.Err();err!=nil{
+        log.Printf("ERROR iterating search results: %v", err)
+        return nil,err
+    }
+    log.Printf("Search successful: query=%q results=%d", query, len(results))
     return results, nil
 }

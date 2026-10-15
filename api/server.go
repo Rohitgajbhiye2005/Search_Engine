@@ -1,9 +1,11 @@
 package api
 
 import (
+	"log"
 	"mini_search_engine/service"
 	"net/http"
 	"strconv"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -24,6 +26,7 @@ func StartServer(svc service.PageService){
 		results,err:=svc.Search(query,limit)
 
 		if err!=nil{
+			log.Printf("ERROR in /search handler: %v", err)
 			ctx.JSON(http.StatusInternalServerError,gin.H{
 				"error":err.Error(),
 			})

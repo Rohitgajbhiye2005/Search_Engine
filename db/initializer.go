@@ -2,26 +2,25 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"mini_search_engine/config"
 	_ "github.com/lib/pq"
 )
 
+
+
+
+
 func Initializer(cfg *config.Config) *sql.DB {
-	connStr := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		cfg.DBHOST, cfg.DBPORT, cfg.DBUSER, cfg.DBPASS, cfg.DBNAME,
-	)
-	db, err := sql.Open("postgres", connStr)
+	db, err := sql.Open("postgres", cfg.DBURL)
 	if err != nil {
-		log.Fatalf("Failed to connect the DB: %v", err)
+		log.Fatalf("Failed to open database: %v", err)
 	}
 
 	if err := db.Ping(); err != nil {
-		log.Fatalf("Failed to ping the postgres: %v", err)
+		log.Fatalf("Failed to connect to Neon: %v", err)
 	}
 
-	log.Println("postgres connected succesfully")
+	log.Println("Neon PostgreSQL connected successfully")
 	return db
 }

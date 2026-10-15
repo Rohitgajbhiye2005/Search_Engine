@@ -3,16 +3,12 @@ package config
 import (
 	"log"
 	"os"
-
+	_ "github.com/lib/pq"
 	"github.com/joho/godotenv"
 )
 
 type Config struct{
-	DBHOST string
-	DBPORT string
-	DBUSER string
-	DBPASS string
-	DBNAME string
+	DBURL string
 }
 
 func Load() *Config{
@@ -22,16 +18,37 @@ func Load() *Config{
 	}
 
 	cfg:=&Config{
-		DBHOST: os.Getenv("DB_HOST"),
-		DBPORT: os.Getenv("DB_PORT"),
-		DBUSER: os.Getenv("DB_USER"),
-		DBPASS: os.Getenv("DB_PASS"),
-		DBNAME: os.Getenv("DB_NAME"),
+		DBURL: os.Getenv("DB_URL"),
 	}
 
-	if cfg.DBHOST=="" || cfg.DBPORT=="" || cfg.DBUSER=="" || cfg.DBPASS=="" || cfg.DBNAME=="" {
-		log.Fatal("Database env var are not properly set")
+	if cfg.DBURL == "" {
+		log.Fatal("DATABASE_URL environment variable is not set")
 	}
 
 	return cfg
 }
+
+
+// package database
+
+// import (
+// 	"database/sql"
+// 	"log"
+// 	"mini_search_engine/config"
+
+// 	_ "github.com/lib/pq"
+// )
+
+// func Initializer(cfg *config.Config) *sql.DB {
+// 	db, err := sql.Open("postgres", cfg.DATABASE_URL)
+// 	if err != nil {
+// 		log.Fatalf("Failed to open database: %v", err)
+// 	}
+
+// 	if err := db.Ping(); err != nil {
+// 		log.Fatalf("Failed to connect to Neon: %v", err)
+// 	}
+
+// 	log.Println("Neon PostgreSQL connected successfully")
+// 	return db
+// }
