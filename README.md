@@ -13,9 +13,9 @@ This project was built to understand how real search engines work internally —
 - Concurrent web crawler using **goroutines**
 - Worker pool for parallel page fetching
 - URL discovery and deduplication
-- Crawls and indexes **10,000+ pages**
+- Crawls and indexes **1000 pages**
 - Content stored in **PostgreSQL**
-- Fast search using **PostgreSQL Full-Text Search (`tsvector` + GIN index)**
+- Fast search using **PostgreSQL Full-Text Search**
 - REST API built with **Gin**
 - Frontend built with HTML, CSS, and JavaScript
 - Go backend serves the frontend files
