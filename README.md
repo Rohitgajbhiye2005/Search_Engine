@@ -1,7 +1,6 @@
 # Mini Search Engine (Go)
 
-A concurrent web crawler and search engine built using Go.  
-The system crawls developer documentation pages, indexes their content, and allows users to search through the indexed dataset.
+A concurrent web crawler and search engine built using Go. The system crawls developer documentation pages, indexes their content, and allows users to search through the indexed dataset.
 
 This project was built to understand how real search engines work internally — including crawling, indexing, and fast query retrieval.
 
@@ -18,50 +17,64 @@ This project was built to understand how real search engines work internally —
 - Content stored in **PostgreSQL**
 - Fast search using **PostgreSQL Full-Text Search (`tsvector` + GIN index)**
 - REST API built with **Gin**
-- Simple frontend search interface
+- Frontend built with HTML, CSS, and JavaScript
+- Go backend serves the frontend files
 
 ## Architecture
 
-Crawler → Content Extraction → Database Storage → Search Index → API → Frontend
+Crawler → Content Extraction → Database Storage → Search Index → REST API → Web Frontend
 
 ## Tech Stack
 
 - Go (Golang)
 - Gin Web Framework
+- HTML, CSS, JavaScript
 - PostgreSQL
 - Goroutines & Channels
 - Worker Pool Pattern
 - PostgreSQL Full-Text Search
 
-## Running the Project
+## Running the Project Locally
 
-### 1. Run the backend server
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Rohitgajbhiye2005/Mini_Search_Engine.git
+cd Mini_Search_Engine
+```
+
+### 2. Configure the database
+
+Make sure PostgreSQL is installed and running. Configure the database connection using the environment variables or configuration method expected by your application.
+
+### 3. Start the backend and frontend
 
 ```bash
 go run main.go
 ```
 
-### 2. Start crawling pages
+The Go server serves the frontend files and API endpoints.
+
+Open your browser and visit:
+
+http://localhost:8080
+
+**Note:** Ensure that your frontend files are in the location expected by your Go server and that your database is configured correctly before starting the application.
+
+### 4. Start crawling pages
+
+With the application running, open another terminal and execute:
 
 ```bash
 curl -X POST http://localhost:8080/crawl \
   -H "Content-Type: application/json" \
   -d '{
-    "seeds": ["https://golang.org"],
+    "seeds": ["https://go.dev"],
     "max_pages": 10000
   }'
 ```
 
-### 3. Start the frontend
-
-```bash
-cd frontend
-python3 -m http.server 3000
-```
-
-Open in your browser:
-
-http://localhost:3000
+This sends a request to the crawler API to begin crawling from the specified seed URL, subject to your implementation's limits and configuration.
 
 ## Example Search Queries
 
@@ -71,4 +84,5 @@ http://localhost:3000
 
 ## Repository
 
-[Mini Search Engine on GitHub](https://github.com/Rohitgajbhiye2005/Mini_Search_Engine)
+[View Mini Search Engine on GitHub](https://github.com/Rohitgajbhiye2005/Mini_Search_Engine)
+
